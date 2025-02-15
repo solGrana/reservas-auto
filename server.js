@@ -14,6 +14,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Configurar Content Security Policy para permitir fuentes
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", 
+    "default-src 'none'; font-src 'self'; style-src 'self'; script-src 'self';");
+    next();
+});
+
 // Obtener todas las reservas
 app.get('/reservas', async (req, res) => {
     const { data, error } = await supabase.from('reservas').select('*').order('creado_en', { ascending: false });
